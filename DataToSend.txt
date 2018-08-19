@@ -1,0 +1,7 @@
+view:
+
+if tournament format == singleelim:
+send: singleEliminationData
+
+else if tournamentformat === roundRobin:
+send:roundRobinData, roundRobinScoreBoard
