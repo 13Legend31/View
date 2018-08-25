@@ -45,6 +45,10 @@ class TheBracket extends Component {
         this.theBracket = findDOMNode(this.refs['theBracket'])
         // extract the id from this and fetch
         const path = this.props.history.location.pathname
+
+        /* http://localhost:1337 */
+        /* https://ezbracketapi.herokuapp.com */
+
         fetch(`https://ezbracketapi.herokuapp.com${path}`)
         .then(response => response.json())
         .then(data => {
