@@ -22,22 +22,36 @@ class TheBracket extends Component {
 
     MouseDown = (e) => {
         this.isMouseDown = true
-        this.vectorX = e.clientX
-        this.vectorY = e.clientY
-    }
-
-    Drag = (e) => {
-        if (this.isMouseDown) {
-            const scrollX = this.vectorX - e.clientX
-            const scrollY = this.vectorY - e.clientY
+        if (e.clientX >= 0 && e.clientY >= 0) {
             this.vectorX = e.clientX
             this.vectorY = e.clientY
-            this.theBracket.scrollTop = this.theBracket.scrollTop + scrollY === 0 ? 0 : this.theBracket.scrollTop + scrollY
-            this.theBracket.scrollLeft = this.theBracket.scrollLeft + scrollX === 0 ? 0 : this.theBracket.scrollLeft + scrollX
+        } else if (e.touches) {
+            this.vectorX = e.touches[0].clientX
+            this.vectorY = e.touches[0].clientY
         }
     }
 
-    MouseUp = (e) => {
+    Drag = (e) => {
+        e.preventDefault()
+        if (this.isMouseDown) {
+            let scrollX, scrollY
+            if (e.clientX && e.clientY) {
+                scrollX = this.vectorX - e.clientX
+                scrollY = this.vectorY - e.clientY
+                this.vectorX = e.clientX
+                this.vectorY = e.clientY
+            } else if (e.touches) {
+                scrollX = this.vectorX - e.touches[0].clientX
+                scrollY = this.vectorY - e.touches[0].clientY
+                this.vectorX = e.touches[0].clientX
+                this.vectorY = e.touches[0].clientY
+            }
+            this.theBracket.scrollTop += scrollY ? scrollY : 0
+            this.theBracket.scrollLeft += scrollX ? scrollX : 0
+        }
+    }
+
+    MouseUp = () => {
         this.isMouseDown = false
     }
 
@@ -85,6 +99,9 @@ class TheBracket extends Component {
                             onMouseMove={this.Drag}
                             onMouseUp={this.MouseUp}
                             onMouseLeave={this.MouseUp}
+                            onTouchStart={this.MouseDown}
+                            onTouchMove={this.Drag}
+                            onTouchEnd={this.MouseUp}
                         >
                             <div className='bracketTop'/>
                             <div className='bracketMid'>
